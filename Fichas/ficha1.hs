@@ -45,20 +45,22 @@ max3' a b c = if a > b
               else max2 b c
 
 -- Diz quantas raizes um polinomio de grau 2 têm 
-nRaizes :: Int -> Int -> Int -> String
+nRaizes :: Float -> Float -> Float -> String
 nRaizes a b c = if b^2 - 4 * c * a == 0 
                 then "O polinomio tem uma raiz"
                 else if b^2 - 4 * c * a > 0 
-                     then "O polinomio tem duas raiz"
+                     then "O polinomio tem duas raizes"
                      else "O polinomio nao tem raizes"                                                        
 
+
 -- Calcula as raizes de um polinomio 
-raizes :: Float -> Float -> Float -> [a]
-raizes a b c = if nRaizes a b c == "O polinomio tem duas raiz"
-               then [-b + sqrt (b^2 - 4 * c * a) / (2 * a),
-                    -b - sqrt (b^2 - 4 * c * a) / (2 * a) ]
+raizes :: Float -> Float -> Float -> [Float]
+raizes a b c = if nRaizes a b c == "O polinomio tem duas raizes"
+               then [(-b + sqrt (b * b - 4 * c * a)) / (2 * a),
+                    (-b - sqrt (b * b - 4 * c * a)) / (2 * a) ]
                else if nRaizes a b c == "O polinomio tem uma raiz" 
-                    then [-b / (2 * a) ]
-                    else []
+                    then [(-b) / (2 * a) ]
+                    else [] 
+
 
 
