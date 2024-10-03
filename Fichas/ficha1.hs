@@ -1,188 +1,213 @@
--- Ficha 1
+--   // FICHA 1 \\
 
---  1
+-- 1.
 
--- a)
--- Perimeter if a circunference
-perimeter :: Double -> Double
-perimeter r = 2 * pi * r 
+--   a)
+-- Calculates the perimeter of a circunference  
+perimeter :: Double -> Double 
+perimeter r  
+         = 2 * pi * r  
 
--- b)
--- Distance of two points 
-dist :: (Double,Double) -> (Double,Double) -> Double
-dist (x1,y1) (x2,y2) = sqrt ((x1-x2)^2 + (y1-y2)^2)
+--   b)
+-- Calculates the distance between two points 
+dist :: (Double,Double) -> (Double,Double) -> (Double)
+dist (x1,y1) (y2,x2) 
+    = sqrt ((x1-x2)^2 + (y1-y1)^2)
 
--- c)
--- Creates pair of the first and last element of a list
+--   c)
+-- Creates a pair of the first and second element of a list 
 fstUlt :: [a] -> (a,a)
-fstUlt l = (head l,last l)
+fstUlt l 
+      = (head l,last l)
 
--- d)
--- Verifies if the first number is a multiple of the second  
-multiple :: Int -> Int -> Bool  
-multiple m n = if   mod n m == 0 
-               then True
-               else False 
+--   d)
+-- Verifies if the first number is a multiple of the second 
+multiple :: Int -> Int -> Bool
+multiple m n 
+        = if   mod n m == 0 
+          then True
+          else False 
 
--- e)
--- If the legth of the list is even gives the list 
--- if not takes the first element of the list 
-truncaOdd :: [a] -> [a]
-truncaOdd l = if   even (length l) 
-                then l 
-                else tail l   
+--   e)
+-- When the number of elements is odd gives back the list without the fist element
+-- When the number of elements is even gives back the same list
+takeOdd :: [a] -> [a]
+takeOdd l
+       = if   odd (length l)
+         then tail l   
+         else l 
 
--- f)
--- Wich nun«mber is bigger between two numbers
+--   f)
+-- Tells wich is bigger between two numbers 
 max2 :: Int -> Int -> Int 
-max2 a b = if   a > b
-           then a
-           else b 
+max2 a b 
+    = if   a > b
+      then a
+      else b 
 
--- g)
--- Wich nun«mber is bigger between three numbers
+--   g)
+-- Tells wich is bigger between three numbers 
 max3 :: Int -> Int -> Int -> Int 
-max3 a b c = if  (max2 a b) > c 
-             then max2 a b 
-             else c
+max3 a b c 
+    = if   a > b 
+      then max2 a c
+      else max2 b c
 
-max3' :: Int -> Int -> Int -> Int 
-max3' a b c = if   a > b 
-              then max2 a c
-              else max2 b c
 
---  2
+-- 2.
 
--- a)
--- How many roots a equation has 
+--   a)
+-- Tells how many roots a polynomial has 
 nRoots :: Float -> Float -> Float -> String
-nRoots a b c = if   b^2 - 4 * c * a == 0 
-                then "The polynomial has one root"
-                else if   b^2 - 4 * c * a > 0 
-                     then "The polynomial has two roots"
-                     else "The polynomial has no root"                                                        
+nRoots a b c
+      | b^2 - 4 * c * a == 0 = "The polynomial has one root" 
+      | b^2 - 4 * c * a >  0 = "The polynomial has two roots"
+      | otherwise            = "The polynomial has no root"
 
--- b)
--- Calculates the roots of the polynomials  
+--   b)
+-- Calculates the roots of the polynomials 
 roots :: Float -> Float -> Float -> [Float]
-roots a b c = if   nRoots a b c == "The polynomial has two roots"
-               then [(-b + sqrt (b * b - 4 * c * a)) / (2 * a),
-                     (-b - sqrt (b * b - 4 * c * a)) / (2 * a) ]
-               else if   nRoots a b c == "The polynomial has one root"  
-                    then [(-b) / (2 * a) ]
-                    else [] 
+roots a b c  
+     |  nRoots a b c == "The polynomial has two roots"
+      = [(-b + sqrt (b * b - 4 * c * a)) / (2 * a),
+         (-b - sqrt (b * b - 4 * c * a)) / (2 * a) ]
+     |  nRoots a b c == "The polynomial has one root"
+      = [(-b) / (2 * a) ]
+     | otherwise = [] 
 
---  3
 
-type Hora = (Int,Int)
+-- 3.
+
+type Hour = (Int,Int)
 
 -- a)
 -- Verifies if its a valid hour 
-validHour :: Hora -> Bool
-validHour (h,m) =    h >= 0 && h < 24 
-                  && m >= 0 && m < 60 
-               
--- b)
--- Says if an hour is after another
-ordHour :: Hora -> Hora -> Bool
+validHour :: Hour -> Bool
+validHour (h,m) 
+         =    h >= 0 && h < 24 
+           && m >= 0 && m < 60 
+
+--   b)
+-- Verifies if an hour is after another one  
+ordHour :: Hour -> Hour -> Bool
 ordHour (h1,m1) (h2,m2) 
-                        | h1 > h2 = True 
-                        | h1 < h2 && m1 < m2 = True 
-                        | otherwise = False
+       | h1 > h2            = True 
+       | h1 < h2 && m1 < m2 = True 
+       | otherwise          = False
 
--- c) 
--- Convert hours into minutes
-convHtoM :: Hora -> Int 
-convHtoM (h,m) = h * 60 + m  
+--   c) 
+-- Convert hours into minutes 
+convHtoM :: Hour -> Int 
+convHtoM (h,m) 
+        = h * 60 + m  
 
--- d)
+--   d) 
 -- Convert minutes into hours 
-convMtoH :: Int -> Hora
-convMtoH m = (div m 60, m - 60 * div m 60)
+convMtoH :: Int -> Hour
+convMtoH m
+        = (div m 60, m - 60 * div m 60)
 
--- e) 
--- Diference between two hours (in minutes) 
-diffHoras :: Hora -> Hora -> Int
-diffHoras (h1,m1) (h2,m2) = abs(convHtoM (h1,m1) - convHtoM(h2,m2)) 
+--   e) 
+-- Calculates the diference between two hours (in minutes) 
+diffHoras :: Hour -> Hour -> Int
+diffHoras (h1,m1) (h2,m2) 
+         = abs (convHtoM (h1,m1) - convHtoM (h2,m2)) 
 
--- f) 
+--   f)  
 -- Adds minutes to an hour 
-addMtoH :: Int -> Hora -> Hora
-addMtoH m (h1,m1) = convMtoH(m + convHtoM(h1,m1)) 
+addMtoH :: Int -> Hour -> Hour
+addMtoH m (h1,m1) 
+       = convMtoH (m + convHtoM (h1,m1)) 
 
---  4 
 
-data Hora' = H Int Int 
+-- 4.
+
+data Hour' = H Int Int 
            deriving (Show,Eq)
 
--- a) 
--- Verifies if its a valid hour 
-validHour' :: Hora' -> Bool
-validHour' (H h m) = if    h >= 0 && h < 24 
-                        && m >= 0 && m < 60 
-                     then True
-                     else False
+--   a)  
+-- Verifies if its a valid hour
+validHour' :: Hour' -> Bool
+validHour' (H h m) 
+          = if      h >= 0 && h < 24 
+                 && m >= 0 && m < 60 
+            then True
+            else False
 
--- b)
--- Says if an hour is after another 
-horaOrd' :: Hora' -> Hora' -> Bool
+--   b)
+-- Verifies if an hour is after another one 
+horaOrd' :: Hour' -> Hour' -> Bool
 horaOrd' (H h1 m1) (H h2 m2) 
-                            | h1 > h2 = True 
-                            | h1 < h2 && m1 < m2 = True 
-                            | otherwise = False 
+        | h1 > h2            = True 
+        | h1 < h2 && m1 < m2 = True 
+        | otherwise          = False 
 
--- c) 
--- Convert hours into minutes 
-convHtoM' :: Hora' -> Int 
-convHtoM' (H h m) = h * 60 + m 
-  
--- d)
+--   c)
+--  Convert hours into minutes
+convHtoM' :: Hour' -> Int 
+convHtoM' (H h m) 
+         = h * 60 + m 
+
+--   d)
 -- Convert minutes into hours 
-convMtoH' :: Int -> Hora'  
-convMtoH' m = (H (div m 60) (m - 60 * div m 60))                                  
+convMtoH' :: Int -> Hour'  
+convMtoH' m 
+         = (H (div m 60) (m - 60 * div m 60)) 
 
--- e) 
--- Diference between two hours (in minutes) 
-diffHoras' :: Hora' -> Hora' -> Int   
-diffHoras' (H h1 m1) (H h2 m2) = abs(convHtoM'(H h1 m1) - convHtoM'(H h2 m2))   
+--   e) 
+-- Calculates the diference between two hours (in minutes) 
+diffHoras' :: Hour' -> Hour' -> Int   
+diffHoras' (H h1 m1) (H h2 m2) 
+          = abs (convHtoM'(H h1 m1) - convHtoM'(H h2 m2))
 
--- f) 
+--   f)
 -- Adds minutes to an hour 
-addMtoH' :: Int -> Hora' -> Hora' 
-addMtoH' m (H h1 m1) = convMtoH'(m + convHtoM'(H h1 m1))  
+addMtoH' :: Int -> Hour' -> Hour' 
+addMtoH' m (H h1 m1)
+        = convMtoH' (m + convHtoM' (H h1 m1))  
 
---  5
+-- 5.
 
-data Semaforo =  Verde
-              | Amarelo
-              | Vermelho
-              deriving (Show,Eq)  
+data TrafficL =  Green
+               | Yellow
+               | Red
+                deriving (Show,Eq)   
 
--- a)
+--   a)
 -- Says the enxt colour of the Traffic light 
-next :: Semaforo -> Semaforo
-next s 
-      | s == Verde   = Amarelo
-      | s == Amarelo = Vermelho
-      | otherwise = Verde 
+next :: TrafficL -> TrafficL
+next l 
+    | l == Green  = Yellow
+    | l == Yellow = Red
+    | otherwise   = Green
 
-next' :: Semaforo -> Semaforo
-next' Verde    = Amarelo 
-next' Amarelo  = Vermelho
-next' Vermelho = Verde
+next' :: TrafficL -> TrafficL
+next' Green  = Yellow
+next' Yellow = Red
+next' Red    = Green
 
--- b) 
--- Says if its obligatorie to stop  
-stop :: Semaforo -> Bool
-stop s = if   s == Vermelho 
-         then True
-         else False
+--   b) 
+-- Says if its obligatorie to stop (Red Light)  
+stop :: TrafficL -> Bool
+stop l  
+    = l == Red 
+      
+stop' :: TrafficL -> Bool 
+stop' Red = True 
+stop' _   = False
 
-stop' :: Semaforo -> Bool 
-stop' Vermelho = True 
-stop' _        = False   
-
--- c) 
+--   c) 
 -- Test if the Traffic light in a crossroad 
-safe :: Semaforo -> Semaforo -> Bool
-safe 
+safe :: TrafficL -> TrafficL -> Bool
+safe l1 l2  
+    | (l1 == Red    && l2 == Green ) = True 
+    | (l1 == Green  && l2 == Red   ) = True
+    | (l1 == Yellow && l2 == Red   ) = True
+    | (l1 == Red    && l2 == Yellow) = True 
+    | otherwise                      = False
+
+safe' :: TrafficL -> TrafficL -> Bool
+safe'  Red  _   = True 
+safe'  _    Red = True
+safe'  _    _   = False
+  
