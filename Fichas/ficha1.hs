@@ -29,7 +29,8 @@ multiplo' :: Int -> Int -> Bool
 multiplo' m n = mod n m == 0 
 
 -- e)
--- Devolve a lista caso a quantidade de elemnetos seja par e devolve tudo menos o primeiro elemento caso seja impar
+-- Devolve a lista caso a quantidade de elemnetos seja par 
+-- e devolve tudo menos o primeiro elemento caso seja impar
 truncaImpar :: [a] -> [a]
 truncaImpar l = if   even (length l) 
                 then l 
@@ -119,6 +120,45 @@ addMtoH m (h1,m1) = convMtoH(m + convHtoM(h1,m1))
 
 --  4 
 
+data Hora' = H Int Int 
+           deriving (Show,Eq)
+
+-- a) 
+-- Verifica se uma hora é valida
+horaValid' :: Hora' -> Bool
+horaValid' (H h m) = if    h >= 0 && h < 24 
+                        && m >= 0 && m < 60 
+                     then True
+                     else False
+
+-- b)
+-- Testa se a primeira hora é depois da segunda hora  
+horaOrd' :: Hora' -> Hora' -> Bool
+horaOrd' (H h1 m1) (H h2 m2) 
+                            | h1 > h2 = True 
+                            | h1 < h2 && m1 < m2 = True 
+                            | otherwise = False 
+
+-- c) 
+-- Coverte horas em minutos 
+convHtoM' :: Hora' -> Int 
+convHtoM' (H h m) = h * 60 + m 
+  
+-- d)
+-- Converte minutos em horas
+convMtoH' :: Int -> Hora'  
+convMtoH' m = (H (div m 60) (m - 60 * div m 60))                                  
+
+-- e) 
+-- Calcula a diferença entre duas horas 
+diffHoras' :: Hora' -> Hora' -> Int   
+diffHoras' (H h1 m1) (H h2 m2) = abs(convHtoM'(H h1 m1) - convHtoM'(H h2 m2))   
+
+-- f) 
+-- Adiciona minutos a uma dada hora 
+addMtoH' :: Int -> Hora' -> Hora' 
+addMtoH' m (H h1 m1) = convMtoH'(m + convHtoM'(H h1 m1))  
+
 --  5
 
 data Semaforo =  Verde
@@ -127,12 +167,12 @@ data Semaforo =  Verde
               deriving (Show,Eq)  
 
 -- a)
--- Calcula a proxima cor do semafor
+-- Calcula a proxima cor do semafro 
 next :: Semaforo -> Semaforo
 next s 
-      |s == Verde   = Amarelo
-      |s == Amarelo = Vermelho
-      |otherwise = Verde 
+      | s == Verde   = Amarelo
+      | s == Amarelo = Vermelho
+      | otherwise = Verde 
 
 next' :: Semaforo -> Semaforo
 next' Verde    = Amarelo 
