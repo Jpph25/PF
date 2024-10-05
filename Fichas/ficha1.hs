@@ -1,11 +1,13 @@
 --   // FICHA 1 \\
 
+import Data.Char (ord, chr) 
+
 -- 1.
 
 --   a)
 -- Calculates the perimeter of a circunference  
-perimeter :: Double -> Double 
-perimeter r  
+perimeter' :: Double -> Double 
+perimeter' r  
          = 2 * pi * r  
 
 --   b)
@@ -96,13 +98,13 @@ ordHour (h1,m1) (h2,m2)
        | otherwise          = False
 
 --   c) 
--- Convert hours into minutes 
+-- Convertes hours into minutes 
 convHtoM :: Hour -> Int 
 convHtoM (h,m) 
         = h * 60 + m  
 
 --   d) 
--- Convert minutes into hours 
+-- Convertes minutes into hours 
 convMtoH :: Int -> Hour
 convMtoH m
         = (div m 60, m - 60 * div m 60)
@@ -143,13 +145,13 @@ horaOrd' (H h1 m1) (H h2 m2)
         | otherwise          = False 
 
 --   c)
---  Convert hours into minutes
+-- Convertes hours into minutes
 convHtoM' :: Hour' -> Int 
 convHtoM' (H h m) 
          = h * 60 + m 
 
 --   d)
--- Convert minutes into hours 
+-- Convertes minutes into hours 
 convMtoH' :: Int -> Hour'  
 convMtoH' m 
          = (H (div m 60) (m - 60 * div m 60)) 
@@ -210,4 +212,158 @@ safe' :: TrafficL -> TrafficL -> Bool
 safe'  Red  _   = True 
 safe'  _    Red = True
 safe'  _    _   = False
-  
+
+
+-- 6.
+
+data Point = Cartesian  Double Double 
+           | Polar      Double Double
+           deriving (Show,Eq)
+
+--   a)
+-- Calculates the distance of a point to the vertical axis
+posX :: Point -> Double
+posX (Cartesian x y) 
+    = x
+posX (Polar d a)
+    = d * cos a       
+
+--   b)
+-- Calculates the distance of a point to the horizontal axis
+posY :: Point -> Double
+posY (Cartesian x y)
+    = y
+posY (Polar d a)
+    = d * sin a 
+
+--   c)
+-- Calculates the distance of a point to the origin 
+radius :: Point -> Double
+radius (Cartesian x y)
+      = sqrt (x^2 + y^2) 
+radius (Polar d a)
+      = d 
+
+--   d)
+-- Calculates the angle of the vector with the horizontal axis (Degrees)  
+angle :: Point -> Double 
+angle (Cartesian x y)
+     = (atan2 x y) * 180/pi    
+angle (Polar d a)
+     = a 
+
+--   e)
+-- Calculates the distance between two points 
+dist' :: Point -> Point -> Double 
+dist' (Cartesian x1 y1) (Cartesian x2 y2)
+     = sqrt ((x1 - x2)^2 + (y1 - y2)^2) 
+dist' (Polar d1 a1) (Polar d2 a2) 
+     = let x1 = posX (Polar d1 a1)
+           x2 = posX (Polar d2 a2)
+           y1 = posY (Polar d1 a1)
+           y2 = posY (Polar d2 a2)  
+       in  sqrt ((x1 - x2)^2 + (y1 - y2)^2)
+
+
+-- 7.
+
+type Point' = (Double,Double) 
+
+data Figure = Circle   Point' Double
+            | Rectangle Point' Point'
+            | Triangle  Point' Point' Point' 
+             deriving (Show,Eq)
+
+--   a)
+-- Tests if the figure is a poligon 
+poligon :: Figure -> Bool 
+poligon (Circle (x,y) r) 
+       = False  
+poligon (Rectangle (x1,y1) (x2,y2)) 
+       | y1 == y2 || x1 == x2 = False
+       | otherwise = True 
+poligon (Triangle (x1,y1) (x2,y2) (x3,y3)) 
+       | x1 == x2 || x1 == x3 || x2 == x3 = False
+       | y1 == y2 || y1 == y3 || y2 == y3 = False      
+       | otherwise = True
+
+--   b) 
+-- Makes the list of veticies of the poligon 
+vertecies :: Figure -> [Point'] 
+vertecies (Circle (x,y) r)
+         = []
+vertecies (Rectangle (x1,y1) (x2,y2))
+         = [(x1,y1),(x1,y2),(x2,y1),(x2,y2)] 
+vertecies (Triangle (x1,y1) (x2,y2) (x3,y3))
+         = [(x1,y1),(x2,y2),(x3,y3)] 
+
+--   c)
+-- Calculate the area of a Figure 
+area :: Figure -> Double 
+area (Circle (x,y) r)
+    = pi * r^2
+area (Rectangle (x1,y1) (x2,y2))
+    = let lx = abs (x1 - x2) 
+          ly = abs (y1 - y2)
+      in  lx * ly 
+area (Triangle (x1,y1) (x2,y2) (x3,y3)) 
+    = let base  = sqrt ((x1 - x2)^2 + (y1 - y2)^2)    
+          pmx   = (x1 + x2)/2
+          pmy   = (y1 + y2)/2
+          heigh = sqrt ((pmx - x3)^2 + (pmy - y3)^2) 
+      in  (base * heigh)/2     
+
+--   d) 
+-- Calculates the perimeter of the figures
+perimeter :: Figure -> Double 
+perimeter (Circle (x,y) r)
+         = 2 * pi * r
+perimeter (Rectangle (x1,y1) (x2,y2))
+         = let lx = abs (x1 - x2)
+               ly = abs (y1 - y2)
+           in  2 * lx + 2 * ly 
+perimeter (Triangle (x1,y1) (x2,y2) (x3,y3))
+         = let l1 = sqrt ((x1 - x2)^2 + (y1 - y2)^2)
+               l2 = sqrt ((x1 - x3)^2 + (y1 - y3)^2)
+               l3 = sqrt ((x2 - x3)^2 + (y2 - y3)^2) 
+           in  l1 + l2 + l3    
+
+
+-- 8. 
+
+--   a)
+-- Verifies if a given character is in lowercas
+isLower :: Char -> Bool
+isLower c 
+       = ord c >= ord 'a' && ord c <= ord 'z'   
+
+--   b) 
+-- Verifies if a given character is a digit 
+isDigit :: Char -> Bool 
+isDigit c
+       = ord c >= ord '0' && ord c <= ord '9' 
+
+--   c) 
+-- Verifies if a given character is a letter 
+isAlpha :: Char -> Bool 
+isAlpha c
+       =    ord c >= ord 'A' && ord c <= ord 'Z' 
+         || ord c >= ord 'a' && ord c <= ord 'z' 
+
+--   d)
+-- Convertes a given letter into is capital version
+toUpper :: Char -> Char 
+toUpper c
+       |  ord c >= ord 'A' && ord c <= ord 'Z' 
+        = c 
+       |  ord c >= ord 'a' && ord c <= ord 'z'
+        = chr (ord 'A' + (ord c - ord 'a')) 
+       |  otherwise = error "Invalid character"   
+
+--   f)
+-- Covertes a digit into is respective number 
+digitToInt :: Char -> Int
+digitToInt c
+          |  ord c >= ord '0' && ord c <= ord '9'
+           = ord c - ord '0' 
+          |  otherwise = error "Invalid character"  
