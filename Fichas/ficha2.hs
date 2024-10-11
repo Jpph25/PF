@@ -150,13 +150,13 @@ seconds   (h:t)
 
 --   h)
 -- Tests if a given element is present as the first element of a list of pairs 
-nosPrimeiros :: (Eq a) => a -> [(a,b)] -> Bool 
-nosPrimeiros  a [] 
-            = False 
-nosPrimeiros  a (h:t) 
-            = if   a == (fst h) 
-              then True 
-              else nosPrimeiros a t 
+infst :: (Eq a) => a -> [(a,b)] -> Bool 
+infst  a [] 
+     = False 
+infst  a (h:t) 
+     = if   a == (fst h) 
+       then True 
+       else infst a t  
 
 --   j)
 -- Gives a triple of the sum of the componentes of a list of triples 
@@ -171,3 +171,118 @@ sumTriples  ((x,y,z):t)
 -- 3.
 
 --   a) 
+-- Chooses the algarism from a list of characters 
+onlydigits :: [Char] -> [Char]
+onlydigits  [] 
+          = []
+onlydigits (h:t) 
+          = if   ord h <= ord '9' && ord h >= ord '0' 
+            then h : onlydigits t
+            else onlydigits t
+
+--   b)
+-- Counts the amount of letters in lowercase in a list
+lowercase :: [Char] -> Int 
+lowercase  []
+         = 0 
+lowercase (h:t)
+         = if   ord h <= ord 'z' && ord h >= ord 'a'
+           then 1 + lowercase t
+           else lowercase t    
+
+--   c)
+-- Gives a list of the algarism presente on a text
+nubs :: String -> [Int] 
+nubs  []
+    = []
+nubs (h:t) 
+    = if   ord h <= ord '9' && ord h >= ord '0'
+      then ord h - ord '0' : nubs t 
+      else nubs t 
+
+
+-- 4.
+
+type Monomial   = (Float,Int)
+type Polynomial = [Monomial]
+
+--   a) 
+-- Counts how many monomial of a certain degree there are in a polynomial 
+count :: Int -> Polynomial -> Int 
+count  g []
+     = 0
+count  g (h:t)
+     = if   snd h == g 
+       then 1 + count g t
+       else count g t  
+
+--   b)
+-- Indicates the degree of the polynomial
+degree :: Polynomial -> Int
+degree  []
+      = 0
+degree [x]
+      = snd x 
+degree (h:x:t) 
+      | snd h >= snd x = degree (h:t)  
+      | snd h <= snd x = degree (x:t) 
+
+--   c)
+-- Selects the monomials of a given degree from a polynomial 
+seldegree :: Int -> Polynomial -> Polynomial 
+seldegree d []
+         = []
+seldegree  d (h:t)
+         = if   d == snd h 
+           then h : seldegree d t
+           else seldegree d t  
+
+--   d)
+
+type Polynomial' = [Monomial']
+type Monomial'   = (Float,Float) 
+
+-- Calculate the derivative of a polynomial 
+deriv :: Polynomial' -> Polynomial' 
+deriv  []
+     = []
+deriv ((n,d):t)
+     = ((d * n), (d - 1)) : deriv t 
+
+--   e)
+-- Calculates the polynomial to a certain x 
+calc :: Float -> Polynomial -> Float 
+calc x []
+    = 0 
+calc x ((n,d):t)
+    = ((n*x)^d) + calc x t    
+
+--   f) 
+-- Takes from the polynomail the zero degree monomials 
+simp :: Polynomial -> Polynomial 
+simp  [] 
+    = []
+simp (h:t) 
+    = if   snd h == 0 
+      then simp t 
+      else h: simp t 
+
+--   g)
+-- Calculates the multiplication of a monomial whith a polynomial 
+mult :: Monomial -> Polynomial -> Polynomial 
+mult (n,d) []
+    = [] 
+mult (n,d) ((x,y):t) 
+    = (n * x, d + y): mult (n,d) t 
+
+--   h)
+-- Simplifies the polynomial 
+normal :: Polynomial -> Polynomial 
+normal  []
+      = []
+normal  [x]
+      = [x] 
+normal (h:x:t)
+      = if   snd h == snd x 
+        then normal ((fst h + fst x, snd h): t) 
+        else (normal (h:t)) ++ normal (x:t)  

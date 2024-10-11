@@ -168,6 +168,7 @@ addMtoH' :: Int -> Hour' -> Hour'
 addMtoH' m (H h1 m1)
         = convMtoH' (m + convHtoM' (H h1 m1))  
 
+
 -- 5.
 
 data TrafficL =  Green
@@ -365,5 +366,5 @@ toUpper c
 digitToInt :: Char -> Int
 digitToInt c
           |  ord c >= ord '0' && ord c <= ord '9'
-           = ord c - ord '0' 
+           = ord c  - ord '0' 
           |  otherwise = error "Invalid character"  
