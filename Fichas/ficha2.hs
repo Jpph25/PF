@@ -247,7 +247,7 @@ deriv :: Polynomial' -> Polynomial'
 deriv  []
      = []
 deriv ((n,d):t)
-     = ((d * n), (d - 1)) : deriv t 
+     = (d * n, d - 1) : deriv t 
 
 --   e)
 -- Calculates the polynomial to a certain x 
@@ -276,13 +276,59 @@ mult (n,d) ((x,y):t)
     = (n * x, d + y): mult (n,d) t 
 
 --   h)
--- Simplifies the polynomial 
+-- Simplifies the polynomial if he is in order of degrees 
 normal :: Polynomial -> Polynomial 
-normal  []
-      = []
-normal  [x]
-      = [x] 
+normal  [ ]
+      = [ ]
+normal  [x] 
+      = [x]
 normal (h:x:t)
-      = if   snd h == snd x 
-        then normal ((fst h + fst x, snd h): t) 
-        else (normal (h:t)) ++ normal (x:t)  
+      | snd h == snd x = normal ((fst h + fst x, snd h): t) 
+      | otherwise = h:normal (x:t)
+
+--   i) 
+-- Sums two polynomials
+sump :: Polynomial -> Polynomial -> Polynomial 
+sump  [] [] 
+    = []
+sump [] [x]
+    = [x] 
+sump [x] []
+    = []            
+sump (h1:t1) (h2:t2) 
+    | snd h1 == snd h2 = (fst h1 + fst h2, snd h1): sump t1 t2  
+    | snd h1  < snd h2 = h2: sump (h1:t1) t2 
+    | snd h1  > snd h2 = h1: sump t1 (h2:t2)   
+
+--   j) 
+-- Multiplies two polynomials 
+multp :: Polynomial -> Polynomial -> Polynomial 
+multp  []  _   
+     = []
+multp   _  []
+     = []
+multp  (h1:t1) (h2:t2) 
+     = mult h1 (h2:t2) ++ multp t1 (h2:t2)  
+
+--   k) 
+-- Puts the polinomial in order of degrees 
+order :: Polynomial -> Polynomial
+order  []
+     = []
+order  [x]
+     = [x]
+order (h:x:t)
+     | snd h >= snd x = h: order (x:t)
+     | snd h  < snd x = x: order (h:t) 
+
+--   l)
+-- Verifies if one polynonial is equal to another 
+equal :: Polynomial -> Polynomial -> Bool 
+equal  [] []
+     = True  
+equal [x] [y]
+     = x == y  
+equal (h1:t1) (h2:t2)
+     | length (h1:t1) /= length (h2:t2) = False  
+     | h1 == h2 && equal t1 t2          = True 
+     | otherwise                        = False 
