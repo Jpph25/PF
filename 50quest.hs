@@ -98,3 +98,86 @@ intspace x []
         = [] 
 intspace x (h:t)
         = h:x : intspace x t  
+
+--   11. 
+-- Groups up in a list duplicated elementes of a list 
+groupUp :: Eq a => [a] -> [[a]] 
+groupUp  []
+       = [] 
+groupUp  [x]
+       = [[x]]
+groupUp (h:x:t) 
+       | h == x = [h,x] : groupUp t 
+       | h /= x = [h]   : groupUp (x:t) 
+
+--   12. 
+-- Turns a list of lists into a simple list 
+conct :: [[a]] -> [a]
+conct  []
+      = [] 
+conct  ((h:t1):t)    
+      = h:t1 ++ conct t 
+
+--   13.
+-- Calculates the prefixes of a list 
+pref :: [a] -> [[a]]
+pref   [] 
+     = [[]]
+pref l 
+    = pref (init l) ++ [l] 
+
+--   14.
+-- Calculates the sufixes of a list 
+suf :: [a] -> [[a]] 
+suf  []
+   = [[]]
+suf l 
+   = [l] ++ suf (tail l) 
+
+--   15. 
+-- Makes a list of the heads of every element of a list of lists 
+hlists :: [[a]] -> [a] 
+hlists  []
+      = []
+hlists  ([]: t)  
+      = hlists t 
+hlists  ((h1:t1): t)   
+      = h1 : hlists t    
+
+--   16. 
+-- Calculates the total lenght of a list of lists 
+total :: [[a]] -> Int 
+total  []
+     = 0
+total ([]: t)
+     = total t 
+total ((h1:t1): t) 
+     = length (h1:t1) + total t 
+
+--   17.
+-- Makes a list of pair of the first and last elemnte of the triples of a list
+fun :: [(a,b,c)] -> [(a,c)]
+fun  [] 
+   = []
+fun  ((x,y,z): t)   
+   = (x,z) : fun t        
+
+--   18.
+-- Makes a list of all the strings in a list of triples 
+glue :: [(String,b,c)] -> String 
+glue  []
+    = " "
+glue  ((x,y,z): t) 
+     = x ++ glue t 
+
+--   19. 
+-- Gives a list of the names of the peploe  
+-- who are older or the same as a given age in a certain year 
+age :: Int -> Int -> [(String, Int)] -> [String] 
+age y a ((n,b): t) 
+   | y - b >= a = n : age y a t   
+   | otherwise 
+    = age y a t 
+
+--   20. 
+-- 
