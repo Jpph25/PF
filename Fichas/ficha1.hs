@@ -12,7 +12,7 @@ perimeter' r
 
 --   b)
 -- Calculates the distance between two points 
-dist :: (Double,Double) -> (Double,Double) -> (Double)
+dist :: (Double,Double) -> (Double,Double) -> Double
 dist (x1,y1) (y2,x2) 
     = sqrt ((x1-x2)^2 + (y1-y1)^2)
 
